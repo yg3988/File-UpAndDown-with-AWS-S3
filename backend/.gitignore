@@ -1,0 +1,12 @@
+# dependencies
+/node_modules
+
+# dotenv for Environment Variable file
+.evn
+
+#log
+npm-debug.log*
+
+# production
+/build
+
