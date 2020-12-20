@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -9,10 +9,18 @@ const StyledDiv = styled.div`
 	transform: translate(-50%, -50%);
 `;
 
-function handleUpload(params) {
-	let targetFile = params.current.files[0];
+const StyledImg = styled.div`
+	width: 960px;
+	height: 720px;
+	background-image: url(${(props) => props.urlImage});
+	background-position: center;
+	background-size: cover;
+`;
 
-	let fileElem = params.current.files[0].name.split('.');
+function handleUpload(params) {
+	let targetFile = params.files[0];
+
+	let fileElem = params.files[0].name.split('.');
 	let fileName = targetFile.name;
 	let fileType = fileElem[1];
 
@@ -43,18 +51,47 @@ function handleUpload(params) {
 			//alert(`POST Error ${JSON.stringify(err)}`);
 		});
 }
+function handleDownload(params, setDownload, setImage) {
+	axios
+		.get('http://localhost:3000/download', {
+			params: { fileName: params.value },
+		})
+		.then((res) => {
+			setDownload(true);
+			setImage(res.data.data.signedRequest);
+		});
+}
 
+//https://koepitestuploadbucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20201211_223813201.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJRRU5H3LEPZ73F4Q%2F20201219%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Date=20201219T130731Z&X-Amz-Expires=900&X-Amz-Signature=99187c3e3bcaed57462e547e03fb457f1709fd9aa8fcb771c4a727b041c59d22&X-Amz-SignedHeaders=host
 function App() {
 	const refFile = useRef(null);
+	const refText = useRef(null);
+	const [download, setDownload] = useState(false);
+	const [image, setImage] = useState('');
+
 	return (
 		<StyledDiv>
-			<input
-				type='file'
-				id='inputImageFileUpload'
-				accept='image/png, image/jpeg'
-				ref={refFile}
-			/>
-			<button onClick={() => handleUpload(refFile)}>파일보내기</button>
+			<div className='test-upload'>
+				<input
+					type='file'
+					id='inputImageFile'
+					accept='image/png, image/jpeg'
+					ref={refFile}
+				/>
+				<button onClick={() => handleUpload(refFile.current)}>
+					파일보내기
+				</button>
+			</div>
+
+			<div className='test-download'>
+				<input type='text' id='inputImageFileTitle' ref={refText} />
+				<button
+					onClick={() => handleDownload(refText.current, setDownload, setImage)}
+				>
+					파일 받기
+				</button>
+				{download && <StyledImg urlImage={image} />}
+			</div>
 		</StyledDiv>
 	);
 }

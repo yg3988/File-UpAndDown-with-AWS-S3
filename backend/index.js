@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 const awsS3 = require('./controller/aws_s3');
 
-app.use('/upload', awsS3);
+app.use('/upload', awsS3.upload);
+app.use('/download', awsS3.download);
 
 app.listen(PORT, () => console.log(`Sever running on port ${PORT}`));
