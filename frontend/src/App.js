@@ -62,7 +62,7 @@ function handleDownload(params, setDownload, setImage) {
 		});
 }
 
-//https://koepitestuploadbucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20201211_223813201.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJRRU5H3LEPZ73F4Q%2F20201219%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Date=20201219T130731Z&X-Amz-Expires=900&X-Amz-Signature=99187c3e3bcaed57462e547e03fb457f1709fd9aa8fcb771c4a727b041c59d22&X-Amz-SignedHeaders=host
+
 function App() {
 	const refFile = useRef(null);
 	const refText = useRef(null);
